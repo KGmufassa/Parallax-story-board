@@ -1,0 +1,18 @@
+User
+  │
+  ▼
+/implement-app command
+  │
+  ▼
+implement-app skill
+  │
+  ▼
+orchestrator.js
+  │
+  ├── validateArchitecture
+  ├── dependencyGraph
+  ├── scaffoldProject
+  ├── buildDatabase
+  ├── buildBackendCore
+  ├── buildFrontendCore
+  └── featureBuilder

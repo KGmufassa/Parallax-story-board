@@ -1,0 +1,11 @@
+/validate-build
+
+Step 9
+Test Runner
+
+ ├─ unit tests
+ ├─ API tests
+ └─ Playwright E2E tests
+
+Step 10
+QA validation
