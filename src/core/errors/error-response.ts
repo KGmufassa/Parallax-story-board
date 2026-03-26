@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { Prisma } from "@prisma/client"
 import { ZodError } from "zod"
 
 import { isAppError } from "@/core/errors/app-error"
@@ -18,6 +19,22 @@ export function toErrorResponse(error: unknown, context: RequestContext) {
         },
       },
       { status: error.statusCode },
+    )
+  }
+
+  if (error instanceof Prisma.PrismaClientInitializationError) {
+    return NextResponse.json(
+      {
+        error: {
+          code: "DATABASE_UNAVAILABLE",
+          message: "The database is unavailable right now.",
+          details: null,
+        },
+        meta: {
+          correlationId: context.correlationId,
+        },
+      },
+      { status: 503 },
     )
   }
 

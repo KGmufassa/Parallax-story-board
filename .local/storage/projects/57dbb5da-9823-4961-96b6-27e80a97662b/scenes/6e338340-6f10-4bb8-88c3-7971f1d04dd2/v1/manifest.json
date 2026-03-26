@@ -1,0 +1,54 @@
+{
+  "projectId": "57dbb5da-9823-4961-96b6-27e80a97662b",
+  "sceneId": "6e338340-6f10-4bb8-88c3-7971f1d04dd2",
+  "generationVersion": 1,
+  "layers": [
+    {
+      "index": 0,
+      "path": "projects/57dbb5da-9823-4961-96b6-27e80a97662b/scenes/6e338340-6f10-4bb8-88c3-7971f1d04dd2/v1/layers/0.png",
+      "width": 1080,
+      "height": 1920,
+      "metadata": {
+        "source": "qwen",
+        "depth": 0,
+        "modelVersion": "qwen-image-layered"
+      }
+    },
+    {
+      "index": 1,
+      "path": "projects/57dbb5da-9823-4961-96b6-27e80a97662b/scenes/6e338340-6f10-4bb8-88c3-7971f1d04dd2/v1/layers/1.png",
+      "width": 1080,
+      "height": 1920,
+      "metadata": {
+        "source": "qwen",
+        "depth": 1,
+        "modelVersion": "qwen-image-layered"
+      }
+    },
+    {
+      "index": 2,
+      "path": "projects/57dbb5da-9823-4961-96b6-27e80a97662b/scenes/6e338340-6f10-4bb8-88c3-7971f1d04dd2/v1/layers/2.png",
+      "width": 1080,
+      "height": 1920,
+      "metadata": {
+        "source": "qwen",
+        "depth": 2,
+        "modelVersion": "qwen-image-layered"
+      }
+    },
+    {
+      "index": 3,
+      "path": "projects/57dbb5da-9823-4961-96b6-27e80a97662b/scenes/6e338340-6f10-4bb8-88c3-7971f1d04dd2/v1/layers/3.png",
+      "width": 1080,
+      "height": 1920,
+      "metadata": {
+        "source": "qwen",
+        "depth": 3,
+        "modelVersion": "qwen-image-layered"
+      }
+    }
+  ],
+  "compositePath": "projects/57dbb5da-9823-4961-96b6-27e80a97662b/scenes/6e338340-6f10-4bb8-88c3-7971f1d04dd2/v1/composite.png",
+  "thumbnailPath": "projects/57dbb5da-9823-4961-96b6-27e80a97662b/scenes/6e338340-6f10-4bb8-88c3-7971f1d04dd2/v1/thumbnail.webp",
+  "generatedAt": "2026-03-22T06:17:25.240Z"
+}

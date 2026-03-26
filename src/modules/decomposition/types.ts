@@ -14,6 +14,16 @@ export type DecompositionLayer = {
   width?: number
   height?: number
   metadata: Record<string, unknown>
+  artifact?: DecompositionArtifact | null
+}
+
+export type DecompositionArtifact = {
+  assetUrl?: string
+  storageKey?: string
+  base64Data?: string
+  mimeType?: string
+  providerFileId?: string
+  metadata?: Record<string, unknown>
 }
 
 export type DecompositionResult = {
@@ -21,6 +31,8 @@ export type DecompositionResult = {
   modelVersion: string
   width?: number
   height?: number
+  compositeArtifact?: DecompositionArtifact | null
+  thumbnailArtifact?: DecompositionArtifact | null
   layers: DecompositionLayer[]
   warnings?: string[]
 }

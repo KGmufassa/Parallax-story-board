@@ -10,33 +10,30 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 
 ## Purpose
 
-- Give authenticated users a dedicated place to manage account details and app preferences
-- Keep account and preferences separate from project creation and editing workflows
-- Provide default settings that influence future editor and preview behavior
+- Provide an informational placeholder for settings during the MVP
+- Keep future account and preference management separate from project creation and editing workflows
+- Clarify that core MVP work happens in projects, editor updates, and preview
 
 ## Primary User Flow
 
-1. Authenticated user opens settings from the global navbar
-2. User reviews account information
-3. User updates app preferences
-4. User saves changes or resets defaults
-5. User returns to the dashboard or an active project workflow
+1. User opens settings from the global navbar
+2. User sees that settings are deferred for the MVP
+3. User is redirected by copy toward projects, editor, or preview workflows
 
 ## Required Layout
 
 - Consistent global navbar
 - Header section with page title and supporting copy
-- Two-column or stacked settings layout depending on breakpoint
-- Clear separation between account settings and app preferences
-- Persistent action area for save and reset actions
+- Informational panel layout
+- Clear explanation that settings are deferred for MVP
 
 ## Navbar Requirement
 
 - Use the shared global navbar exactly
-- Keep `Product`, `Dashboard`, `New Project`, and `Settings` naming consistent with the rest of the app
-- `Product` routes to `/`
-- `Dashboard` routes to `/projects`
-- `New Project` creates a project and routes to `/editor/[projectId]`
+- Keep `Home`, `Projects`, `New Project`, and `Settings` naming consistent with the rest of the app
+- `Home` routes to `/`
+- `Projects` routes to `/projects`
+- `New Project` routes to `/projects/new`
 - `Settings` routes to `/settings`
 
 ## Required Sections
@@ -44,49 +41,27 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 ### 1. Page Header
 
 - Title like `Settings`
-- Supporting text explaining that this page controls account information and default creative preferences
+- Supporting text explaining that settings are deferred and not part of the MVP workflow
 
-### 2. Account Information
+### 2. Deferred Scope Notice
 
-- `Display Name` input
-- `Email` field
-- Authentication provider display
-- Password management note or action if supported by the auth provider
+- Explain that account preferences, saved defaults, and session controls are deferred until after MVP
+- Clarify that the core MVP experience lives in projects, uploads, editor updates, preview, and guest claiming
 
-### 3. App Preferences
+### 3. What To Use Instead
 
-- `Reduced Motion` default toggle
-- `Default Story Pace` selector:
-  - `Calm`
-  - `Balanced`
-  - `Fast`
-- `Default Transition Style` selector:
-  - `Fade Depth`
-  - `Soft Lift`
-  - `Crossfade Scale`
-- `Default Motion Preset` selector:
-  - `Cinematic Push`
-  - `Ambient Float`
-  - `Hero Reveal`
-  - `Dramatic Depth`
-- `Output Format` display locked to `9:16`
-
-### 4. Session
-
-- Sign-out area with a clear but restrained destructive action style
+- Point users to `Projects` for active work
+- Point users to the editor for uploads and scene updates
+- Point users to preview for stitched playback validation
 
 ## Required Buttons
 
-- `Save Changes`
-- `Reset Defaults`
-- `Sign Out`
+- None required for MVP beyond global navigation
 
 ## Interaction Intent
 
-- `Save Changes` persists account and preference updates
-- `Reset Defaults` restores preference values to system defaults
-- `Sign Out` ends the current authenticated session
-- Preference changes should affect future project/editor/player defaults, not destructively overwrite existing project-specific settings
+- The page is informational during MVP and should not imply editable account or preference persistence
+- The page should help users route back into active project workflows
 
 ## Design Notes
 

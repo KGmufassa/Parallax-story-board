@@ -1,0 +1,103 @@
+
+> parallax-story-composer@0.1.0 predev
+> npm run clean
+
+
+> parallax-story-composer@0.1.0 clean
+> node -e "require('fs').rmSync('.next', { recursive: true, force: true })"
+
+
+> parallax-story-composer@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.5.12
+   - Local:        http://localhost:3000
+   - Network:      http://10.0.0.132:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1249ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1685ms (598 modules)
+ HEAD / 200 in 1970ms
+ GET / 200 in 133ms
+ ✓ Compiled /projects/new in 302ms (601 modules)
+ GET /projects/new 200 in 414ms
+ ✓ Compiled /projects in 239ms (613 modules)
+ GET /projects 200 in 300ms
+ ○ Compiling /api/v1/projects ...
+ ✓ Compiled /api/v1/projects in 670ms (850 modules)
+{"level":30,"time":"2026-03-24T05:11:31.391Z","correlationId":"4d9ae88b-2230-40ac-af59-b15d2d7702df","method":"GET","path":"/api/v1/projects","statusCode":200,"durationMs":75,"msg":"request completed"}
+ GET /api/v1/projects 200 in 922ms
+{"level":30,"time":"2026-03-24T05:11:31.394Z","correlationId":"9f587ee8-a64f-4687-b082-3b45ee4efa67","method":"GET","path":"/api/v1/projects","statusCode":200,"durationMs":80,"msg":"request completed"}
+ GET /api/v1/projects 200 in 923ms
+ ✓ Compiled /projects/[projectId]/editor in 294ms (862 modules)
+ GET /projects/57dbb5da-9823-4961-96b6-27e80a97662b/editor 200 in 786ms
+ ✓ Compiled /api/v1/projects/[projectId] in 284ms (874 modules)
+{"level":30,"time":"2026-03-24T05:11:33.373Z","correlationId":"4b7a1ac2-ed96-4e14-92b6-7d42bc770518","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":8,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 356ms
+{"level":30,"time":"2026-03-24T05:11:33.374Z","correlationId":"8e4fb00d-1052-49b6-9ac6-8c9daccbe8f8","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":10,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 351ms
+{"level":30,"time":"2026-03-24T05:11:33.789Z","correlationId":"f4d204eb-ad8b-458e-a17a-9796aab9772a","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":20,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 766ms
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 763ms
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 768ms
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 767ms
+{"level":30,"time":"2026-03-24T05:11:33.790Z","correlationId":"c9da6191-683b-423d-bb83-9b7e6f640c1f","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":21,"msg":"request completed"}
+{"level":30,"time":"2026-03-24T05:11:33.792Z","correlationId":"270975f2-6aee-4e08-bf41-ad108d0d4b24","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":15,"msg":"request completed"}
+{"level":30,"time":"2026-03-24T05:11:33.793Z","correlationId":"79b8a262-6dfb-400d-ac3b-e82fcc6cc076","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":16,"msg":"request completed"}
+{"level":30,"time":"2026-03-24T05:12:37.198Z","correlationId":"7376c903-ad4d-42cc-abc4-85b44dce99cc","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":57,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 121ms
+{"level":30,"time":"2026-03-24T05:12:37.256Z","correlationId":"17701302-b42d-4955-8fd1-6a4988694344","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":83,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 167ms
+{"level":30,"time":"2026-03-24T05:12:37.267Z","correlationId":"47d6a7ee-7355-44c5-bf11-56dd6359ff8a","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":103,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 175ms
+{"level":30,"time":"2026-03-24T05:13:10.456Z","correlationId":"b6a7971c-c818-4028-9bee-3e5e8df5bd81","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":26,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 75ms
+{"level":30,"time":"2026-03-24T05:13:10.476Z","correlationId":"d9e0576d-5df8-44dd-8510-0534f49472f2","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":18,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 85ms
+{"level":30,"time":"2026-03-24T05:13:10.480Z","correlationId":"208b1964-9487-4e87-a615-ccb984c86675","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":12,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 85ms
+{"level":30,"time":"2026-03-24T05:13:21.585Z","correlationId":"77482734-169a-4930-ab28-578fc9870fde","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":24,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 57ms
+{"level":30,"time":"2026-03-24T05:13:21.595Z","correlationId":"ab314d8f-5600-4827-b2df-829fadc45fca","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":20,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 62ms
+{"level":30,"time":"2026-03-24T05:13:21.598Z","correlationId":"756fa4b8-e7ea-4aac-8e64-803d40de7a1b","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":12,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 63ms
+{"level":30,"time":"2026-03-24T05:13:25.908Z","correlationId":"8e1ecbd1-21b7-4537-80bc-80eb44e2eda2","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":19,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 69ms
+{"level":30,"time":"2026-03-24T05:13:25.919Z","correlationId":"89dc52bc-3ff9-4704-b0c8-54c3a9978832","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":9,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 70ms
+{"level":30,"time":"2026-03-24T05:13:25.923Z","correlationId":"8b69ae10-85f5-4fdd-8673-56e1dd686342","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":12,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 72ms
+{"level":30,"time":"2026-03-24T05:15:26.054Z","correlationId":"70a38ccc-17a0-4340-b501-0bdcf250cfa5","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":18,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 91ms
+{"level":30,"time":"2026-03-24T05:15:26.062Z","correlationId":"85978fcf-3e6e-4fa9-8909-efcd10f201e1","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":11,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 49ms
+{"level":30,"time":"2026-03-24T05:15:26.065Z","correlationId":"df4a319f-1caf-44cc-8d0b-d2c8f027c441","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":13,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 51ms
+{"level":30,"time":"2026-03-24T05:15:30.527Z","correlationId":"87deeb53-6ec3-4eb9-9999-7f34ec13716d","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":10,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 43ms
+{"level":30,"time":"2026-03-24T05:15:30.535Z","correlationId":"500dae27-01d3-4e03-aec7-cb42e80a212a","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":8,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 46ms
+{"level":30,"time":"2026-03-24T05:15:30.538Z","correlationId":"245973fb-3c5f-48d1-92f3-b6a889d9f966","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":12,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 44ms
+{"level":30,"time":"2026-03-24T05:15:32.323Z","correlationId":"6158518a-767e-4e40-a7eb-315838d964a9","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":17,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 47ms
+{"level":30,"time":"2026-03-24T05:15:32.336Z","correlationId":"0157d9cb-f76a-4304-9442-2d7eab1c2b52","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":12,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 56ms
+{"level":30,"time":"2026-03-24T05:15:32.339Z","correlationId":"077b2ef2-17d7-45c3-bbbf-787957120a57","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":11,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 58ms
+{"level":30,"time":"2026-03-24T05:15:35.010Z","correlationId":"0f8ebb49-b47f-44e4-af65-42a003d87144","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":10,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 38ms
+{"level":30,"time":"2026-03-24T05:15:35.024Z","correlationId":"7ea144dc-e489-4508-877b-13b148f9269d","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":13,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 46ms
+{"level":30,"time":"2026-03-24T05:15:35.027Z","correlationId":"f10df978-1027-4e08-bda1-4d7c062125a0","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":10,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 48ms
+{"level":30,"time":"2026-03-24T05:15:36.722Z","correlationId":"7bd4c690-8090-4922-b4ef-3fa98dc83c79","method":"GET","path":"/api/v1/auth/session","statusCode":200,"durationMs":19,"msg":"request completed"}
+ GET /api/v1/auth/session 200 in 53ms
+{"level":30,"time":"2026-03-24T05:15:36.746Z","correlationId":"1a61b35c-ad45-488f-b3c1-de06e1f19f40","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b","statusCode":200,"durationMs":22,"msg":"request completed"}
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b 200 in 69ms
+ GET /api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback 200 in 70ms
+{"level":30,"time":"2026-03-24T05:15:36.748Z","correlationId":"4ebf2fbb-568f-4877-8671-493520398090","method":"GET","path":"/api/v1/projects/57dbb5da-9823-4961-96b6-27e80a97662b/preview/playback","statusCode":200,"durationMs":18,"msg":"request completed"}
+[?25h

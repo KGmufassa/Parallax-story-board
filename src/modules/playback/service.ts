@@ -14,6 +14,56 @@ type StitchOptions = {
   traceId?: string | null
 }
 
+function round(value: number, digits = 3) {
+  return Number(value.toFixed(digits))
+}
+
+function applyReducedMotionToLayerBehavior(layer: Record<string, any>, multiplier: number) {
+  const nextLayer: Record<string, unknown> = {
+    ...layer,
+    parallax: round((layer.parallax ?? 0.2) * multiplier),
+  }
+
+  for (const deviceKey of ["mobile", "tablet", "desktop"] as const) {
+    const mapping = layer[deviceKey]
+
+    if (!mapping || typeof mapping !== "object") {
+      continue
+    }
+
+    nextLayer[deviceKey] = {
+      ...mapping,
+      translateX: round(((mapping.translateX as number | undefined) ?? 0) * multiplier),
+      translateY: round(((mapping.translateY as number | undefined) ?? 0) * multiplier),
+      scaleFrom: round(1 + ((((mapping.scaleFrom as number | undefined) ?? 1) - 1) * multiplier)),
+      scaleTo: round(1 + ((((mapping.scaleTo as number | undefined) ?? 1) - 1) * multiplier)),
+      speedMultiplier: round(((mapping.speedMultiplier as number | undefined) ?? 1) * multiplier),
+    }
+  }
+
+  if (typeof layer.translateX === "number") {
+    nextLayer.translateX = round(layer.translateX * multiplier)
+  }
+
+  if (typeof layer.translateY === "number") {
+    nextLayer.translateY = round(layer.translateY * multiplier)
+  }
+
+  if (typeof layer.scaleFrom === "number") {
+    nextLayer.scaleFrom = round(1 + (layer.scaleFrom - 1) * multiplier)
+  }
+
+  if (typeof layer.scaleTo === "number") {
+    nextLayer.scaleTo = round(1 + (layer.scaleTo - 1) * multiplier)
+  }
+
+  if (typeof layer.speedMultiplier === "number") {
+    nextLayer.speedMultiplier = round(layer.speedMultiplier * multiplier)
+  }
+
+  return nextLayer
+}
+
 function deriveSceneDuration(scene: { motionIntensity?: string | null }) {
   const value = scene.motionIntensity?.toLowerCase() ?? ""
   if (value.includes("high")) {
@@ -81,10 +131,7 @@ export const playbackService = {
         intensity: reducedMotion ? "low" : blueprint.intensity ?? "medium",
         layerBehaviors: reducedMotion
           ? Array.isArray(blueprint.layerBehaviors)
-            ? blueprint.layerBehaviors.map((layer: any) => ({
-                ...layer,
-                parallax: Number(((layer.parallax ?? 0.2) * (blueprint.reducedMotion?.multiplier ?? 0.2)).toFixed(3)),
-              }))
+            ? blueprint.layerBehaviors.map((layer: any) => applyReducedMotionToLayerBehavior(layer, blueprint.reducedMotion?.multiplier ?? 0.2))
             : []
           : blueprint.layerBehaviors ?? [],
         transition: blueprint.transition ?? { overlapMs: DEFAULT_SCENE_OVERLAP_MS, easing: "ease-out" },

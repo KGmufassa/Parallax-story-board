@@ -50,8 +50,8 @@ Use the same navbar across all pages.
 ### Navbar Elements
 
 - Logo / wordmark
-- Product
-- Dashboard
+- Home
+- Projects
 - New Project
 - Settings
 - Preview when contextually relevant
@@ -61,7 +61,7 @@ Use the same navbar across all pages.
 ### Navbar Order
 
 - Left: logo / wordmark
-- Middle: `Product`, `Dashboard`
+- Middle: `Home`, `Projects`
 - Right: `New Project`, `Settings`, contextual `Preview` if relevant, then auth or user actions
 
 ### Navbar Behavior
@@ -70,9 +70,9 @@ Use the same navbar across all pages.
 - Highlight current page with neon green active state
 - Show guest/auth state clearly
 - Preserve premium dark theme across all breakpoints
-- `Product` routes to `/`
-- `Dashboard` routes to `/projects` and acts as the project hub where users continue existing projects or create new ones
-- `New Project` creates a project and routes to `/editor/[projectId]`
+- `Home` routes to `/`
+- `Projects` routes to `/projects` and acts as the project hub where users continue existing projects or create new ones
+- `New Project` routes to `/projects/new`
 - `Settings` routes to `/settings` and contains account and preferences only in the MVP
 
 ## Global Product Rules Reflected In All Designs

@@ -58,7 +58,12 @@ export const sceneService = {
   },
 
   async update(sceneId: string, input: UpdateSceneInput) {
-    return sceneRepository.update(sceneId, input)
+    return sceneRepository.update(sceneId, {
+      contextText: input.contextText,
+      motionPreset: input.motionPreset,
+      motionIntensity: input.motionIntensity,
+      grouping: input.grouping,
+    })
   },
 
   async reorder(projectId: string, sceneIds: string[]) {

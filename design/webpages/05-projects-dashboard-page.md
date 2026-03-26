@@ -12,7 +12,7 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 
 - Give authenticated users a home for saved project management
 - Reinforce the value of account ownership and persistence
-- Serve as the `Dashboard` destination in the global navbar
+- Serve as the `Projects` destination in the global navbar
 
 ## Primary User Flow
 
@@ -32,18 +32,18 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 ## Navbar Requirement
 
 - Use the shared global navbar exactly
-- The landing destination in the navbar must be labeled `Product`
-- The project hub destination in the navbar must be labeled `Dashboard`
-- `Product` routes to `/`
-- `Dashboard` routes to `/projects`
-- `New Project` creates a project and routes to `/editor/[projectId]`
+- The landing destination in the navbar must be labeled `Home`
+- The project hub destination in the navbar must be labeled `Projects`
+- `Home` routes to `/`
+- `Projects` routes to `/projects`
+- `New Project` routes to `/projects/new`
 - `Settings` routes to `/settings`
 
 ## Required Sections
 
 ### 1. Header
 
-- Title like `Dashboard`
+- Title like `Projects`
 - Supporting text
 - `New Project` button
 
@@ -91,7 +91,7 @@ Each project item should include:
 - `Preview` opens player page
 - `Export` is only available when applicable
 - `Delete Project` requires confirmation
-- `New Project` creates a project and routes directly to that project's editor page
+- `New Project` routes to `/projects/new`
 
 ## Design Notes
 
@@ -99,4 +99,4 @@ Each project item should include:
 - Avoid generic admin UI feeling
 - Use consistent card treatments, status chips, and navbar
 - Maintain the same dark grey and neon green design language
-- The navbar item for this page must be labeled `Dashboard`, not `Projects`
+- The navbar item for this page must be labeled `Projects`

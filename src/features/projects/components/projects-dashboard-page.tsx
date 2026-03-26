@@ -1,14 +1,16 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import type { Route } from "next"
+import Link from "next/link"
 
 import { AppHeader } from "@/features/shared/components/app-header"
 import { AppIcon } from "@/features/shared/components/app-icon"
-import { mockProjects } from "@/features/projects/mock-projects"
 
 import { ProjectCard } from "./project-card"
 
 type ViewMode = "carousel" | "grid"
+type SortMode = "recent" | "name" | "scenes"
 
 type ApiEnvelope<T> = {
   data: T
@@ -23,8 +25,10 @@ type ApiErrorEnvelope = {
 type ProjectSummary = {
   id: string
   title: string
+  status: string
   updatedAt: string
   scenes: Array<{
+    status?: string
     sourceImageUrl: string | null
     thumbnailUrl: string | null
     assets?: Array<{
@@ -36,7 +40,9 @@ type ProjectSummary = {
 type DashboardProject = {
   title: string
   scenes: string
+  status: string
   updatedAt: string
+  updatedAtIso: string
   projectId: string
   image: string | null
 }
@@ -44,8 +50,10 @@ type DashboardProject = {
 function mapProjectToDashboardProject(project: {
   id: string
   title: string
+  status: string
   updatedAt: string
   scenes: Array<{
+    status?: string
     sourceImageUrl?: string | null
     thumbnailUrl?: string | null
     assets?: Array<{
@@ -57,7 +65,9 @@ function mapProjectToDashboardProject(project: {
   return {
     title: project.title,
     scenes: String(Array.isArray(project.scenes) ? project.scenes.length : 0),
+    status: project.status,
     updatedAt: formatUpdatedAt(project.updatedAt),
+    updatedAtIso: project.updatedAt,
     projectId: project.id,
     image: resolveProjectImage({
       ...project,
@@ -69,13 +79,6 @@ function mapProjectToDashboardProject(project: {
     }),
   }
 }
-
-const mockDashboardProjects = mockProjects.map((project) =>
-  mapProjectToDashboardProject({
-    ...project,
-    scenes: project.scenes.map((scene) => ({ image: scene.image })),
-  }),
-)
 
 const PROJECTS_PER_PAGE = 4
 
@@ -163,6 +166,8 @@ async function ensureGuestSession() {
 
 export function ProjectsDashboardPage() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [sortMode, setSortMode] = useState<SortMode>("recent")
   const [carouselPage, setCarouselPage] = useState(0)
   const [projects, setProjects] = useState<DashboardProject[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -190,18 +195,13 @@ export function ProjectsDashboardPage() {
         const payload = await parseJsonResponse<ProjectSummary[]>(response)
         const projects = normalizeProjects({ data: payload })
 
-        if (projects.length === 0) {
-          setProjects(mockDashboardProjects)
-          return
-        }
-
         setProjects(
           projects.map((project) => mapProjectToDashboardProject(project)),
         )
       } catch {
         if (!cancelled) {
-          setProjects(mockDashboardProjects)
-          setErrorMessage(null)
+          setProjects([])
+          setErrorMessage("We could not load your projects right now.")
         }
       } finally {
         if (!cancelled) {
@@ -217,14 +217,35 @@ export function ProjectsDashboardPage() {
     }
   }, [])
 
-  const totalPages = Math.max(1, Math.ceil(projects.length / PROJECTS_PER_PAGE))
+  const filteredProjects = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase()
+    const matchingProjects = normalizedQuery
+      ? projects.filter((project) =>
+          [project.title, project.status, `${project.scenes} scenes`].some((value) => value.toLowerCase().includes(normalizedQuery)),
+        )
+      : projects
+
+    return [...matchingProjects].sort((left, right) => {
+      if (sortMode === "name") {
+        return left.title.localeCompare(right.title)
+      }
+
+      if (sortMode === "scenes") {
+      return Number(right.scenes) - Number(left.scenes)
+      }
+
+      return new Date(right.updatedAtIso).getTime() - new Date(left.updatedAtIso).getTime()
+    })
+  }, [projects, searchQuery, sortMode])
+
+  const totalPages = Math.max(1, Math.ceil(filteredProjects.length / PROJECTS_PER_PAGE))
   const carouselPages = useMemo(
     () =>
       Array.from({ length: totalPages }, (_, pageIndex) => {
         const start = pageIndex * PROJECTS_PER_PAGE
-        return projects.slice(start, start + PROJECTS_PER_PAGE)
+        return filteredProjects.slice(start, start + PROJECTS_PER_PAGE)
       }),
-    [projects, totalPages],
+    [filteredProjects, totalPages],
   )
 
   const setMode = (mode: ViewMode) => {
@@ -244,20 +265,20 @@ export function ProjectsDashboardPage() {
             <p className="projects-kicker">Library</p>
             <h1>Your Projects</h1>
             <p>
-              Manage and preview your cinematic story sequences. You have {projects.length} active
-              {projects.length === 1 ? " project" : " projects"} in your library.
+              Manage and preview your cinematic story sequences. You have {filteredProjects.length} active
+              {filteredProjects.length === 1 ? " project" : " projects"} in your library.
             </p>
           </div>
-          <button className="projects-mobile-create is-disabled" disabled type="button">
+          <Link className="projects-mobile-create" href={"/projects/new" as Route}>
             <AppIcon className="projects-inline-icon" name="add" />
             Create New Sequence
-          </button>
+          </Link>
         </div>
 
         <div className="projects-controls-row">
           <label className="projects-search-field">
             <AppIcon className="projects-search-field__icon" name="search" />
-            <input placeholder="Search by title or scene..." type="search" />
+            <input onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search by title or status..." type="search" value={searchQuery} />
           </label>
           <div className="projects-controls-group">
             <div className="projects-view-toggle" aria-label="Project layout view">
@@ -285,17 +306,13 @@ export function ProjectsDashboardPage() {
               </button>
             </div>
             <div className="projects-select-wrap">
-              <select defaultValue="Sort by: Recent">
-                <option>Sort by: Recent</option>
-                <option>Sort by: Name</option>
-                <option>Sort by: Scenes</option>
+              <select onChange={(event) => setSortMode(event.target.value as SortMode)} value={sortMode}>
+                <option value="recent">Sort by: Recent</option>
+                <option value="name">Sort by: Name</option>
+                <option value="scenes">Sort by: Scenes</option>
               </select>
               <AppIcon className="projects-select-wrap__icon" name="expand_more" />
             </div>
-            <button className="projects-filter-button is-disabled" disabled type="button">
-              <AppIcon className="projects-inline-icon" name="filter_list" />
-              Filter
-            </button>
           </div>
         </div>
 
@@ -319,18 +336,22 @@ export function ProjectsDashboardPage() {
               <p>{errorMessage}</p>
             </div>
           </div>
-        ) : projects.length === 0 ? (
+        ) : filteredProjects.length === 0 ? (
           <div className="projects-empty-state">
             <div className="projects-empty-state__icon">
               <AppIcon className="projects-empty-state__icon-svg" name="create_new_folder" />
             </div>
             <div>
-              <h3>Ready to start something new?</h3>
-              <p>Harness the power of parallax layers and cinematic AI to bring your stories to life.</p>
+              <h3>{projects.length === 0 ? "Ready to start something new?" : "No projects match your search"}</h3>
+              <p>
+                {projects.length === 0
+                  ? "Create your first project to start uploading scenes and building a stitched mobile preview."
+                  : "Try a different title or status query to find the project you want."}
+              </p>
             </div>
-            <button className="projects-empty-state__button is-disabled" disabled type="button">
+            <Link className="projects-empty-state__button" href={"/projects/new" as Route}>
               New Project
-            </button>
+            </Link>
           </div>
         ) : viewMode === "carousel" ? (
           <section className="projects-carousel" aria-label="Projects carousel">
@@ -380,10 +401,10 @@ export function ProjectsDashboardPage() {
           </section>
         ) : (
           <div className="projects-grid">
-            {projects.map((project) => (
-              <ProjectCard key={project.projectId} {...project} viewMode={viewMode} />
-            ))}
-          </div>
+             {filteredProjects.map((project) => (
+               <ProjectCard key={project.projectId} {...project} viewMode={viewMode} />
+             ))}
+           </div>
         )}
       </section>
 
@@ -394,14 +415,12 @@ export function ProjectsDashboardPage() {
         </div>
         <div>
           {[
-            "Documentation",
-            "API Reference",
-            "Support",
-            "Terms",
+            "Projects",
+            "Preview",
+            "Guest claim flow",
+            "Local MVP setup",
           ].map((item) => (
-            <button className="projects-footer__link is-disabled" disabled key={item} type="button">
-              {item}
-            </button>
+            <span className="projects-footer__link" key={item}>{item}</span>
           ))}
         </div>
       </footer>

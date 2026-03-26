@@ -8,56 +8,56 @@ import { AppIcon } from "@/features/shared/components/app-icon"
 const howItWorks: Array<{ title: string; body: string; image: string; icon: AppIconName }> = [
   {
     title: "1. Upload",
-    body: "Import your high-res RAW or JPEG images to the composer engine.",
+    body: "Upload supported image files and turn them into ordered project scenes.",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuArwtni54PHapKEODx6doVeYttx5JaLYaiyzVzVxJQCraahqK5B_ACiJgSbkrOLcC0ZbqdQlJx-rmd2kQvwG1-EmF8KTG_BSIYo2yCtVGJus5TvBwVYS7WrJ3JnXCtUMBlPz1qdSuHOYC4LNOj_r3vWDfZBB9cbaKIcArFrg7u_kogSE374avb2J-u14aSDUeL662VB7FPgqGTFOCa15hCh280wXjeXhlwM3PjWItwFYI0L_X0Q__ezWk4rLSks-Ou1shdfKq_SUDw",
     icon: "upload_file",
   },
   {
     title: "2. Build Scenes",
-    body: "Define foreground, midground, and background layers with AI masking.",
+    body: "Add scene context, reorder the timeline, and keep the project moving from upload to ready.",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuD56SjIME50ktrzigeVWGdMX-zfGgaKhukwG41jVLRAGlXbcoJnWnzNuPUjyK7cswMh30ggMAuBet2puze3Vh25I9OUIvhfWyGDrNC40trQvpAppBfWXuYrwhNsFVoo2erQ04lPcVx-AbU_TGVVs-q_BaFiIGCrxJt1p3GWgk4D_ICRLDnGz07XgC5lZ42Q7BfJRwtxqquFrZMTI1Kq-MZjXHo2bH_lFDPbhB1VZwE6haRVpEc1I04HZC85dg4owW67kFcm2BQswkM",
     icon: "stack",
   },
   {
     title: "3. Motion Direction",
-    body: "Set cinematic pan, zoom, and tilt paths for each individual layer.",
+    body: "Choose motion presets and intensity per scene before queueing generation or retrying failures.",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuAgxdharMz3IZdeOQyRQ9KI3S0s7fkz7j13d5b_M_lUVzltbfbU9u7El40vNINGJSrtWoNCPRNb5ll5OFOMQ0V_pmLCb6fvbCGmd5tTBMy3G3Q2AvMdkOI6XbpALrGJZiMqDIKiyUo1lYImI1l7alXRYKt6DAuLMLpnWyw-BLQpHn3_9t0RiaJ1q0ed4jcNOgdHzKbO9Y6Wu9lKkAHrV3gogS7xD480bdBvTePyxAnUgAlNNA-JYlwJ-VtBCoNfJjw0K--ml_ONqjQ",
     icon: "movie_edit",
   },
   {
     title: "4. Preview Story",
-    body: "Watch the fully stitched story and export in up to 4K resolution.",
+    body: "Review a stitched mobile preview that stays usable even when only some scenes are ready.",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBIp7VIb2LyIPZtzjv8G9rIVxe5qQJYbhBdjZlodEMmiNj50qo4JzhLchvFzvbLKuyJS_TK7faZrfoGYFW2WQ3lAN0BwHQLHlvV-eo8nG6GLLOw8QiKAf1IdixT3zOTfFwKlhOPRWtaGoWBEdYTiMxYkFV9HN2Y-B4C4Zk-6KQ1iCiEMlTK7i63DDWST7Ali3WkrxxLMngB4PMRaSTwdSvThtrnt4GlAqGM7s9Ad9CdnKo1aWw_5z5ZVEXT2KTKXa7DH2UIMjk8ddc",
     icon: "play_circle",
   },
 ]
 
-const footerProductLinks = ["Features", "Tutorials", "Gallery", "Pricing"]
-const footerResourceLinks = ["Documentation", "API Reference", "Community", "Support"]
+const footerProductLinks = ["Projects", "Editor", "Preview", "Guest Access"]
+const footerResourceLinks = ["Local Setup", "Health Checks", "Auth", "Support"]
 const featureItems: Array<{ icon: AppIconName; title: string; body: string }> = [
   {
     icon: "view_quilt",
     title: "Scene Manager",
-    body: "Organize complex stories into multiple sequenced scenes with smooth transitions.",
+    body: "Organize uploads into a real ordered timeline with editable scene metadata and status visibility.",
   },
   {
     icon: "auto_fix_high",
-    title: "AI Layer Decomposition",
-    body: "Automatically extract subjects and fill in backgrounds using generative infilling.",
+    title: "Generation Pipeline",
+    body: "Queue scene processing, retry failed work, and keep partially ready projects previewable.",
   },
   {
     icon: "draw",
-    title: "Motion Planning",
-    body: "Bezier-curve motion paths for organic, non-linear camera movements.",
+    title: "Editor Controls",
+    body: "Update project context, style hints, motion preset, and intensity from the editor instead of mock controls.",
   },
   {
     icon: "swipe_down_alt",
-    title: "Stitched Scroll Engine",
-    body: "Web-ready exports that react to user scrolling for interactive long-form stories.",
+    title: "Stitched Preview",
+    body: "Use the current MVP player to inspect scene order, timing, and fallback playback on mobile-sized layouts.",
   },
 ]
 
@@ -70,15 +70,15 @@ export function LandingPage() {
         <div className="landing-hero__copy">
           <div className="landing-badge">
             <span className="landing-badge__dot" />
-            Next-Gen Cinematic Engine
+            MVP Story Workflow
           </div>
           <h1 className="landing-hero__title">
-            Transform Still Images into <span>Cinematic</span> Parallax Stories
+            Turn Still Images into <span>Previewable</span> Parallax Stories
           </h1>
           <p className="landing-hero__lede">
-            Upload your high-res photos and watch them come to life with our automated layered
-            stitching engine. Build immersive 2.5D scenes with professional motion planning in
-            minutes.
+            Upload images, shape scene-by-scene motion, and review a stitched vertical preview.
+            The current launch path focuses on uploads, editing, preview, and guest-to-account
+            claiming instead of full export tooling.
           </p>
           <div className="landing-hero__actions">
             <Link className="landing-button landing-button--primary" href={"/projects/new" as Route}>
@@ -178,24 +178,24 @@ export function LandingPage() {
             </div>
             <div>
               <h3>GUEST ACCESS</h3>
-              <p>Preview mode enabled</p>
+              <p>Guest workflow enabled</p>
             </div>
           </div>
           <ul className="landing-guest-card__list">
-            <li><AppIcon className="landing-guest-card__list-icon" name="check_circle" /> Real-time Parallax Preview</li>
-            <li><AppIcon className="landing-guest-card__list-icon" name="check_circle" /> Basic Motion Keyframing</li>
-            <li className="is-locked"><AppIcon className="landing-guest-card__list-icon" name="lock" /> Cloud Project Saving</li>
-            <li className="is-locked"><AppIcon className="landing-guest-card__list-icon" name="lock" /> High-Res Video Export (MP4/WebM)</li>
+            <li><AppIcon className="landing-guest-card__list-icon" name="check_circle" /> Create projects and upload scene images</li>
+            <li><AppIcon className="landing-guest-card__list-icon" name="check_circle" /> Edit scene context and motion settings</li>
+            <li className="is-locked"><AppIcon className="landing-guest-card__list-icon" name="lock" /> Claim projects to an account for long-term ownership</li>
+            <li className="is-locked"><AppIcon className="landing-guest-card__list-icon" name="lock" /> Export remains out of scope for the MVP</li>
           </ul>
-          <button className="landing-button landing-button--ghost is-disabled" disabled type="button">
-            Unlock Full Features
-          </button>
+          <Link className="landing-button landing-button--ghost" href={"/signup" as Route}>
+            Claim Your Workspace
+          </Link>
         </aside>
       </section>
 
       <section className="landing-final-cta">
         <h2>Ready to bring your images to life?</h2>
-        <p>Join thousands of creators building cinematic experiences without leaving their browser.</p>
+        <p>Start the guest workflow now, then claim the project later if you want to keep it beyond the guest lifecycle.</p>
         <Link className="landing-button landing-button--primary landing-button--large" href={"/projects/new" as Route}>
           Create Your Story
         </Link>
@@ -211,16 +211,16 @@ export function LandingPage() {
               <h3>Parallax Story Composer</h3>
             </div>
             <p>
-              The ultimate tool for photographers and digital artists to create depth-based cinematic
-              experiences.
+              An MVP workflow for uploads, scene editing, stitched preview, and guest-to-account
+              claiming.
             </p>
             <div className="landing-footer__socials">
-              <button className="landing-footer__social is-disabled" disabled type="button">
+              <Link className="landing-footer__social" href={"/projects" as Route}>
                 <AppIcon className="landing-footer__social-icon" name="public" />
-              </button>
-              <button className="landing-footer__social is-disabled" disabled type="button">
+              </Link>
+              <Link className="landing-footer__social" href={"/projects/new" as Route}>
                 <AppIcon className="landing-footer__social-icon" name="video_library" />
-              </button>
+              </Link>
             </div>
           </div>
           <div>
@@ -228,9 +228,7 @@ export function LandingPage() {
             <ul className="landing-footer__links">
               {footerProductLinks.map((item) => (
                 <li key={item}>
-                  <button className="landing-footer__link is-disabled" disabled type="button">
-                    {item}
-                  </button>
+                  <span className="landing-footer__link">{item}</span>
                 </li>
               ))}
             </ul>
@@ -240,9 +238,7 @@ export function LandingPage() {
             <ul className="landing-footer__links">
               {footerResourceLinks.map((item) => (
                 <li key={item}>
-                  <button className="landing-footer__link is-disabled" disabled type="button">
-                    {item}
-                  </button>
+                  <span className="landing-footer__link">{item}</span>
                 </li>
               ))}
             </ul>
@@ -251,12 +247,7 @@ export function LandingPage() {
         <div className="landing-footer__bottom">
           <p>© 2024 Parallax Story Composer. All rights reserved.</p>
           <div>
-            <button className="landing-footer__meta-link is-disabled" disabled type="button">
-              Privacy Policy
-            </button>
-            <button className="landing-footer__meta-link is-disabled" disabled type="button">
-              Terms of Service
-            </button>
+            <span className="landing-footer__meta-link">Privacy and legal pages ship after MVP launch.</span>
           </div>
         </div>
       </footer>

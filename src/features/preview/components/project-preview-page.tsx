@@ -5,158 +5,23 @@ import type { Route } from "next"
 import Link from "next/link"
 
 import { AppHeader } from "@/features/shared/components/app-header"
-import { getMockProjectById } from "@/features/projects/mock-projects"
+import { PlaybackSceneRenderer } from "@/features/preview/components/playback-scene-renderer"
+import { buildNormalizedPlaybackState, parseApiResponse, type NormalizedPlaybackState, type PlaybackResponse, type ProjectRecord } from "@/features/preview/lib/playback-client"
 
 type ProjectPreviewPageProps = {
   projectId: string
 }
 
-type ApiEnvelope<T> = {
-  data: T
-}
-
-type ApiErrorEnvelope = {
-  error?: {
-    message?: string
-  }
-}
-
-type ProjectResponse = {
-  title: string
-  status: string
-  scenes: Array<{
-    id: string
-    orderIndex: number
-    status: string
-    contextText: string | null
-    sourceImageUrl: string | null
-    thumbnailUrl: string | null
-    assets?: Array<{
-      assetUrl: string
-    }>
-  }>
-}
-
-type PlaybackResponse = {
-  isFallback: boolean
-  isReducedMotion: boolean
-  timelineJson?: {
-    scenes?: Array<{
-      sceneId: string
-      orderIndex: number
-      status: string
-      sourceImageUrl: string | null
-      thumbnailUrl: string | null
-      fallback: boolean
-      startsAtMs: number
-      durationMs: number
-      cameraMovement: string
-      intensity: string
-    }>
-  }
-}
-
-type PreviewScene = {
-  id: string
-  orderIndex: number
-  status: string
-  title: string
-  detail: string
-  imageUrl: string | null
-  fallback: boolean
-}
-
 type PreviewState = {
   isLoading: boolean
   errorMessage: string | null
-  projectTitle: string
-  projectStatus: string
-  isFallback: boolean
-  isReducedMotion: boolean
-  scenes: PreviewScene[]
+  playback: NormalizedPlaybackState | null
 }
 
 const initialState: PreviewState = {
   isLoading: true,
   errorMessage: null,
-  projectTitle: "Project Preview",
-  projectStatus: "draft",
-  isFallback: false,
-  isReducedMotion: false,
-  scenes: [],
-}
-
-function isRenderableImageUrl(value: string | null | undefined) {
-  if (!value) {
-    return false
-  }
-
-  return value.startsWith("https://") || value.startsWith("http://") || value.startsWith("/") || value.startsWith("data:")
-}
-
-function resolveProjectSceneImage(scene: ProjectResponse["scenes"][number]) {
-  if (isRenderableImageUrl(scene.sourceImageUrl)) {
-    return scene.sourceImageUrl
-  }
-
-  if (isRenderableImageUrl(scene.thumbnailUrl)) {
-    return scene.thumbnailUrl
-  }
-
-  const assetUrl = scene.assets?.find((asset) => isRenderableImageUrl(asset.assetUrl))?.assetUrl
-  return assetUrl ?? null
-}
-
-async function parseResponse<T>(response: Response) {
-  const contentType = response.headers.get("content-type") ?? ""
-  const payload = contentType.includes("application/json")
-    ? ((await response.json().catch(() => null)) as ApiEnvelope<T> | ApiErrorEnvelope | null)
-    : null
-
-  if (!response.ok) {
-    throw new Error(payload && "error" in payload ? payload.error?.message ?? "Unable to load preview data." : "Unable to load preview data.")
-  }
-
-  if (!payload || !("data" in payload)) {
-    throw new Error("Unexpected response from the server.")
-  }
-
-  return payload.data
-}
-
-function normalizeProject(project: ProjectResponse | null | undefined) {
-  return {
-    title: project?.title ?? "Project Preview",
-    status: project?.status ?? "draft",
-    scenes: Array.isArray(project?.scenes) ? project.scenes : [],
-  }
-}
-
-function normalizePlayback(playback: PlaybackResponse | null) {
-  return {
-    isFallback: playback?.isFallback ?? false,
-    isReducedMotion: playback?.isReducedMotion ?? false,
-    scenes: Array.isArray(playback?.timelineJson?.scenes) ? playback.timelineJson.scenes : [],
-  }
-}
-
-function formatSceneTitle(index: number) {
-  return `Scene ${String(index + 1).padStart(2, "0")}`
-}
-
-function formatSceneDetail(source: { startsAtMs?: number; durationMs?: number; contextText?: string | null; cameraMovement?: string }) {
-  if (source.contextText) {
-    return source.contextText
-  }
-
-  if (typeof source.startsAtMs === "number" && typeof source.durationMs === "number") {
-    const startSeconds = (source.startsAtMs / 1000).toFixed(1)
-    const durationSeconds = (source.durationMs / 1000).toFixed(1)
-    const movement = source.cameraMovement ? ` - ${source.cameraMovement}` : ""
-    return `Starts at ${startSeconds}s for ${durationSeconds}s${movement}`
-  }
-
-  return "Preview section ready for scroll playback."
+  playback: null,
 }
 
 export function ProjectPreviewPage({ projectId }: ProjectPreviewPageProps) {
@@ -168,36 +33,13 @@ export function ProjectPreviewPage({ projectId }: ProjectPreviewPageProps) {
     async function loadPreview() {
       setState(initialState)
 
-      try {
-        const mockProject = getMockProjectById(projectId)
-
-        if (mockProject) {
-          const mockScenes = mockProject.scenes.map((scene, index) => ({
-            id: scene.id,
-            orderIndex: index,
-            status: scene.status,
-            title: formatSceneTitle(index),
-            detail: formatSceneDetail({ contextText: scene.contextText }),
-            imageUrl: scene.image,
-            fallback: false,
-          }))
-
-          setState({
-            isLoading: false,
-            errorMessage: null,
-            projectTitle: mockProject.title,
-            projectStatus: mockProject.status,
-            isFallback: true,
-            isReducedMotion: false,
-            scenes: mockScenes,
-          })
-          return
-        }
-
-        const [projectResult, playbackResult] = await Promise.allSettled([
-          fetch(`/api/v1/projects/${projectId}`, { cache: "no-store" }).then((response) => parseResponse<ProjectResponse>(response)),
+        try {
+          const [projectResult, playbackResult] = await Promise.allSettled([
+          fetch(`/api/v1/projects/${projectId}`, { cache: "no-store" }).then((response) =>
+            parseApiResponse<ProjectRecord>(response, "Unable to load preview data."),
+          ),
           fetch(`/api/v1/projects/${projectId}/preview/playback`, { cache: "no-store" }).then((response) =>
-            parseResponse<PlaybackResponse>(response),
+            parseApiResponse<PlaybackResponse>(response, "Unable to load preview data."),
           ),
         ])
 
@@ -214,53 +56,10 @@ export function ProjectPreviewPage({ projectId }: ProjectPreviewPageProps) {
           return
         }
 
-        const project = normalizeProject(projectResult.value)
-        const playback = normalizePlayback(playbackResult.status === "fulfilled" ? playbackResult.value : null)
-
-        const scenesFromPlayback = playback.scenes
-          .map((scene, index) => {
-            const projectScene = project.scenes.find((item) => item.id === scene.sceneId)
-
-            return {
-              id: scene.sceneId,
-              orderIndex: scene.orderIndex,
-              status: scene.status,
-              title: formatSceneTitle(index),
-              detail: formatSceneDetail({
-                startsAtMs: scene.startsAtMs,
-                durationMs: scene.durationMs,
-                cameraMovement: scene.cameraMovement,
-                contextText: projectScene?.contextText,
-              }),
-              imageUrl:
-                (isRenderableImageUrl(scene.sourceImageUrl) ? scene.sourceImageUrl : null) ??
-                (isRenderableImageUrl(scene.thumbnailUrl) ? scene.thumbnailUrl : null) ??
-                (projectScene ? resolveProjectSceneImage(projectScene) : null),
-              fallback: scene.fallback,
-            }
-          })
-          .sort((left, right) => left.orderIndex - right.orderIndex)
-
-        const scenesFromProject = project.scenes
-          .map((scene, index) => ({
-            id: scene.id,
-            orderIndex: scene.orderIndex,
-            status: scene.status,
-            title: formatSceneTitle(index),
-            detail: formatSceneDetail({ contextText: scene.contextText }),
-            imageUrl: resolveProjectSceneImage(scene),
-            fallback: false,
-          }))
-          .sort((left, right) => left.orderIndex - right.orderIndex)
-
         setState({
           isLoading: false,
           errorMessage: null,
-          projectTitle: project.title,
-          projectStatus: project.status,
-          isFallback: playback.isFallback,
-          isReducedMotion: playback.isReducedMotion,
-          scenes: scenesFromPlayback.length > 0 ? scenesFromPlayback : scenesFromProject,
+          playback: buildNormalizedPlaybackState(projectResult.value, playbackResult.status === "fulfilled" ? playbackResult.value : null),
         })
       } catch {
         if (!cancelled) {
@@ -280,13 +79,15 @@ export function ProjectPreviewPage({ projectId }: ProjectPreviewPageProps) {
     }
   }, [projectId])
 
+  const playback = state.playback
+
   const previewCountLabel = useMemo(() => {
-    if (state.scenes.length === 1) {
+    if (playback?.scenes.length === 1) {
       return "1 scene"
     }
 
-    return `${state.scenes.length} scenes`
-  }, [state.scenes.length])
+    return `${playback?.scenes.length ?? 0} scenes`
+  }, [playback?.scenes.length])
 
   return (
     <main className="misc-screen preview-screen">
@@ -297,15 +98,16 @@ export function ProjectPreviewPage({ projectId }: ProjectPreviewPageProps) {
           <div className="preview-page-header">
             <div>
               <p className="misc-kicker">Preview</p>
-              <h1>{state.projectTitle}</h1>
+              <h1>{playback?.projectTitle ?? "Project Preview"}</h1>
               <p className="misc-copy">A mobile-first stitched scroll preview for project `{projectId}`.</p>
             </div>
             <div className="preview-page-header__actions">
               <div className="preview-page-badges">
                 <span>{previewCountLabel}</span>
-                <span>{state.projectStatus}</span>
-                {state.isFallback ? <span>Fallback playback</span> : null}
-                {state.isReducedMotion ? <span>Reduced motion</span> : null}
+                <span>{playback?.projectStatus ?? "draft"}</span>
+                {playback?.playbackVersion ? <span>Playback v{playback.playbackVersion}</span> : null}
+                {playback?.isFallback ? <span>Fallback playback</span> : null}
+                {playback?.isReducedMotion ? <span>Reduced motion</span> : null}
               </div>
               <Link className="misc-button misc-button--secondary" href={`/projects/${projectId}/editor` as Route}>
                 Back to Editor
@@ -332,7 +134,7 @@ export function ProjectPreviewPage({ projectId }: ProjectPreviewPageProps) {
             </div>
           ) : null}
 
-          {!state.isLoading && !state.errorMessage && state.scenes.length === 0 ? (
+          {!state.isLoading && !state.errorMessage && (playback?.scenes.length ?? 0) === 0 ? (
             <div className="preview-empty-state">
               <div>
                 <h2>No scenes yet</h2>
@@ -341,9 +143,48 @@ export function ProjectPreviewPage({ projectId }: ProjectPreviewPageProps) {
             </div>
           ) : null}
 
-          {!state.isLoading && !state.errorMessage && state.scenes.length > 0 ? (
+          {!state.isLoading && !state.errorMessage && (playback?.scenes.length ?? 0) > 0 ? (
             <div className="preview-scroll-stack">
-              {state.scenes.map((scene, index) => (
+              <section className="preview-scene-section">
+                <div className="preview-scene-copy">
+                  <p className="preview-scene-copy__eyebrow">Stitched mobile player</p>
+                  <h2>Timeline-aware preview</h2>
+                  <p>
+                    Each scene is stitched into a single vertical player using playback timing. Fallback-ready scenes remain visible so partially processed projects stay previewable.
+                  </p>
+                  <div className="preview-scene-copy__badges">
+                    <span>{playback?.totalDurationMs ?? 0} ms total</span>
+                    <span>{playback?.isFallback ? "Partial-ready playback" : "Fully ready playback"}</span>
+                  </div>
+                </div>
+
+                <div className="preview-phone preview-phone--scene">
+                  <div className="preview-phone__chrome">
+                    <span className="preview-phone__dot" />
+                    <span>{playback?.projectTitle}</span>
+                  </div>
+
+                  <div className="preview-phone__timeline">
+                    {playback?.scenes.map((scene) => (
+                      <section
+                        className="preview-phone__timeline-scene"
+                        key={scene.id}
+                        style={{ minHeight: `${Math.max(240, Math.round((scene.durationMs ?? 2200) / 10))}px` }}
+                      >
+                        <PlaybackSceneRenderer scene={scene} isReducedMotion={playback.isReducedMotion} />
+
+                        <div className="preview-phone__scene-overlay" />
+                        <div className="preview-phone__scene-meta">
+                          <span>{scene.title}</span>
+                          <span>{scene.startsAtMs ?? 0} ms</span>
+                        </div>
+                      </section>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              {playback?.scenes.map((scene, index) => (
                 <section className="preview-scene-section" key={scene.id}>
                   <div className="preview-scene-copy">
                     <p className="preview-scene-copy__eyebrow">{scene.title}</p>
@@ -351,31 +192,8 @@ export function ProjectPreviewPage({ projectId }: ProjectPreviewPageProps) {
                     <p>{scene.detail}</p>
                     <div className="preview-scene-copy__badges">
                       <span>{scene.status}</span>
+                      <span>{scene.durationMs ?? 2200} ms</span>
                       {scene.fallback ? <span>Fallback</span> : <span>Primary render</span>}
-                    </div>
-                  </div>
-
-                  <div className="preview-phone preview-phone--scene">
-                    <div className="preview-phone__chrome">
-                      <span className="preview-phone__dot" />
-                      <span>{scene.title}</span>
-                    </div>
-
-                    {scene.imageUrl ? (
-                      <div className="preview-phone__scene-image" style={{ backgroundImage: `url("${scene.imageUrl}")` }} />
-                    ) : (
-                      <div className="preview-phone__scene-image preview-phone__scene-image--placeholder">
-                        <div>
-                          <strong>Image unavailable</strong>
-                          <span>This scene is linked, but its asset URL is not public yet.</span>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="preview-phone__scene-overlay" />
-                    <div className="preview-phone__scene-meta">
-                      <span>{scene.title}</span>
-                      <span>{index + 1} / {state.scenes.length}</span>
                     </div>
                   </div>
                 </section>

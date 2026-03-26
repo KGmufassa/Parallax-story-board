@@ -6,8 +6,9 @@ import { finalizeUploadsInputSchema, sceneReprocessInputSchema, updateSceneInput
 import { projectService } from "@/modules/projects"
 import { sceneService } from "@/modules/scenes"
 import { uploadService } from "@/modules/uploads"
-import { buildThumbnailAssetPath } from "@/modules/assets"
+import { assetStorageService, buildThumbnailAssetPath, serializeScene } from "@/modules/assets"
 import { processingService } from "@/modules/processing"
+import { motionService } from "@/modules/motion"
 import { playbackService } from "@/modules/playback"
 import { AppError } from "@/core/errors/app-error"
 import type { RequestContext } from "@/core/request/context"
@@ -80,13 +81,23 @@ export const sceneController = {
       }),
     )
 
+    await Promise.all(
+      scenes.map((scene) => {
+        if (!scene.sourceImageUrl || !scene.thumbnailUrl) {
+          return Promise.resolve()
+        }
+
+        return assetStorageService.copy(scene.sourceImageUrl, scene.thumbnailUrl)
+      }),
+    )
+
     for (const scene of scenes) {
       await processingService.enqueueSceneDecomposition(scene.id, context.correlationId, {
         reason: "upload-finalized",
       })
     }
 
-    return created(scenes, { correlationId: context.correlationId })
+    return created(scenes.map((scene) => serializeScene(scene)), { correlationId: context.correlationId })
   },
 
   async update(sceneId: string, request: Request, context: RequestContext) {
@@ -95,7 +106,23 @@ export const sceneController = {
     ensureProjectAccess(actor, "edit", scene.project)
     const input = await parseJsonBody(request, updateSceneInputSchema)
     const updatedScene = await sceneService.update(sceneId, input)
-    return ok(updatedScene, { correlationId: context.correlationId })
+    const refreshedScene = await motionService.generateForScene({
+      id: updatedScene.id,
+      projectId: updatedScene.projectId,
+      assets: updatedScene.assets.map((asset) => ({
+        assetType: asset.assetType,
+        layerOrder: asset.layerOrder,
+        metadataJson: asset.metadataJson,
+      })),
+      motionPreset: updatedScene.motionPreset,
+      motionIntensity: updatedScene.motionIntensity,
+      framingData: updatedScene.framingData,
+    }, context.correlationId)
+    await playbackService.stitchProject(scene.projectId, {
+      allowFallback: true,
+      traceId: context.correlationId,
+    }).catch(() => null)
+    return ok(serializeScene(refreshedScene), { correlationId: context.correlationId })
   },
 
   async remove(sceneId: string, context: RequestContext) {

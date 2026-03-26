@@ -3,6 +3,7 @@ import { parseJsonBody } from "@/interfaces/http/support/json-body"
 import { resolveRequestActor } from "@/interfaces/http/support/request-actor"
 import { ensureProjectAccess } from "@/interfaces/http/support/authorization"
 import { AppError } from "@/core/errors/app-error"
+import { serializeProject, serializeProjects } from "@/modules/assets"
 import { projectService } from "@/modules/projects"
 import {
   claimProjectInputSchema,
@@ -32,7 +33,7 @@ export const projectController = {
         : { kind: "guest", guestSessionId: actor.guestSessionId },
     )
 
-    return ok(projects, { correlationId: context.correlationId })
+    return ok(serializeProjects(projects), { correlationId: context.correlationId })
   },
 
   async create(request: Request, context: RequestContext) {
@@ -64,14 +65,14 @@ export const projectController = {
             },
     })
 
-    return created(project, { correlationId: context.correlationId })
+    return created(serializeProject(project), { correlationId: context.correlationId })
   },
 
   async getById(projectId: string, context: RequestContext) {
     const actor = await resolveRequestActor()
     const project = await projectService.getById(projectId)
     ensureProjectAccess(actor, "preview", project)
-    return ok(project, { correlationId: context.correlationId })
+    return ok(serializeProject(project), { correlationId: context.correlationId })
   },
 
   async update(projectId: string, request: Request, context: RequestContext) {
@@ -80,7 +81,11 @@ export const projectController = {
     ensureProjectAccess(actor, "edit", project)
     const input = await parseJsonBody(request, updateProjectInputSchema)
     const updatedProject = await projectService.update(projectId, input)
-    return ok(updatedProject, { correlationId: context.correlationId })
+    await playbackService.stitchProject(projectId, {
+      allowFallback: true,
+      traceId: context.correlationId,
+    }).catch(() => null)
+    return ok(serializeProject(updatedProject), { correlationId: context.correlationId })
   },
 
   async remove(projectId: string, context: RequestContext) {
@@ -118,7 +123,7 @@ export const projectController = {
       guestSessionId,
     })
 
-    return ok(claimedProject, { correlationId: context.correlationId })
+    return ok(serializeProject(claimedProject), { correlationId: context.correlationId })
   },
 
   async reorderScenes(projectId: string, request: Request, context: RequestContext) {
@@ -144,6 +149,6 @@ export const projectController = {
       traceId: context.correlationId,
     })
     const updatedProject = await projectService.getById(projectId)
-    return ok(updatedProject, { correlationId: context.correlationId })
+    return ok(serializeProject(updatedProject), { correlationId: context.correlationId })
   },
 }

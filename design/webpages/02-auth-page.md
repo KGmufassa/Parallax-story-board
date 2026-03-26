@@ -31,11 +31,11 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 ## Navbar Requirement
 
 - Use the shared global navbar exactly
-- The landing destination in the navbar must be labeled `Product`
-- The project hub destination in the navbar must be labeled `Dashboard`
-- `Product` routes to `/`
-- `Dashboard` routes to `/projects`
-- `New Project` creates a project and routes to `/editor/[projectId]`
+- The landing destination in the navbar must be labeled `Home`
+- The project hub destination in the navbar must be labeled `Projects`
+- `Home` routes to `/`
+- `Projects` routes to `/projects`
+- `New Project` routes to `/projects/new`
 - `Settings` routes to `/settings`
 
 ## Required Sections
@@ -63,13 +63,13 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 - `Create Account`
 - `Log In`
 - `Continue with Google`
-- `Back to Product`
+- `Back to Home`
 
 ## Interaction Intent
 
 - Successful auth unlocks persistence and export
 - Page should feel like unlocking premium workflow capability
-- `Back to Product` returns the user to `/`
+- `Back to Home` returns the user to `/`
 
 ## Design Notes
 

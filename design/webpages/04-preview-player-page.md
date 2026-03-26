@@ -6,7 +6,7 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 
 ## Route
 
-`/preview/[projectId]`
+`/projects/[projectId]/preview`
 
 ## Purpose
 
@@ -31,10 +31,10 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 ## Navbar Requirement
 
 - Use the shared global navbar exactly
-- Keep `Product`, `Dashboard`, `New Project`, and `Settings` naming consistent with the rest of the app
-- `Product` routes to `/`
-- `Dashboard` routes to `/projects`
-- `New Project` creates a project and routes to `/editor/[projectId]`
+- Keep `Home`, `Projects`, `New Project`, and `Settings` naming consistent with the rest of the app
+- `Home` routes to `/`
+- `Projects` routes to `/projects`
+- `New Project` routes to `/projects/new`
 - `Settings` routes to `/settings`
 
 ## Required Sections

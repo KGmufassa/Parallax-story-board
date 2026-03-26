@@ -14,15 +14,15 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 - Explain that the app turns multiple static images into one stitched parallax story
 - Let users start as guest or authenticate
 - Set expectations that preview is available to guests, while save and export require login
-- Represent the `Product` destination in the global navbar
+- Represent the `Home` destination in the global navbar
 
 ## Navbar Requirement
 
 - Use the shared global navbar exactly
-- The landing page nav label must be `Product`, not `Home`
-- `Product` routes to `/`
-- `Dashboard` routes to `/projects`
-- `New Project` creates a project and routes to `/editor/[projectId]`
+- The landing page nav label must be `Home`
+- `Home` routes to `/`
+- `Projects` routes to `/projects`
+- `New Project` routes to `/projects/new`
 - `Settings` routes to `/settings`
 
 ## Primary User Flow
@@ -36,7 +36,7 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 
 - Consistent global navbar
 - Hero section
-- Product explainer section
+- Home explainer section
 - How it works section
 - Feature/value section
 - Save/export gating explanation

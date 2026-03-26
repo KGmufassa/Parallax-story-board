@@ -8,9 +8,9 @@ Use these shared components across all `Parallax Story Composer` pages to keep t
 - Page active state
 - Auth state actions
 - User avatar/menu
-- `Product` nav route to `/`
-- `Dashboard` nav route to `/projects`
-- `New Project` action route to `/editor/[projectId]` after project creation
+- `Home` nav route to `/`
+- `Projects` nav route to `/projects`
+- `New Project` nav route to `/projects/new`
 - `Settings` nav route to `/settings`
 
 ## Buttons

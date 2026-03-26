@@ -6,7 +6,7 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 
 ## Route
 
-`/editor/[projectId]`
+`/projects/[projectId]/editor`
 
 ## Purpose
 
@@ -37,10 +37,10 @@ Use the shared design system in `design/webpages/00-shared-design-system.md` exa
 
 - Same dark navbar as other pages
 - Context-aware active state for editor
-- Include logo, `Product`, `Dashboard`, `New Project`, `Settings`, and user/auth controls
-- `Product` routes to `/`
-- `Dashboard` routes to `/projects`
-- `New Project` creates a project and routes to `/editor/[projectId]`
+- Include logo, `Home`, `Projects`, `New Project`, `Settings`, and user/auth controls
+- `Home` routes to `/`
+- `Projects` routes to `/projects`
+- `New Project` routes to `/projects/new`
 - `Settings` routes to `/settings`
 
 ## Required Sections

@@ -84,11 +84,22 @@ export const sceneRepository = {
     )
   },
 
-  update(id: string, data: { contextText?: string | null; motionPreset?: string | null; motionIntensity?: string | null }) {
+  update(id: string, data: {
+    contextText?: string | null
+    motionPreset?: string | null
+    motionIntensity?: string | null
+    grouping?: Prisma.InputJsonValue | null
+  }) {
     return prisma.scene.update({
       where: { id },
-      data,
+      data: {
+        contextText: data.contextText,
+        motionPreset: data.motionPreset,
+        motionIntensity: data.motionIntensity,
+        framingData: data.grouping === null ? Prisma.JsonNull : data.grouping,
+      },
       include: {
+        project: true,
         assets: {
           orderBy: [{ layerOrder: "asc" }, { createdAt: "asc" }],
         },

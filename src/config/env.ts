@@ -4,6 +4,7 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
   NEXTAUTH_SECRET: z.string().min(1, "NEXTAUTH_SECRET is required"),
   NEXTAUTH_URL: z.string().url("NEXTAUTH_URL must be a valid URL"),
+  LOCAL_STORAGE_ROOT: z.string().min(1).default(".local/storage"),
   GOOGLE_CLIENT_ID: z.string().optional().default(""),
   GOOGLE_CLIENT_SECRET: z.string().optional().default(""),
   GUEST_SESSION_COOKIE_NAME: z.string().min(1).default("psc_guest_session"),
@@ -17,6 +18,7 @@ const envSchema = z.object({
     .transform((value) => value.split(",").map((entry) => entry.trim()).filter(Boolean))
     .default("image/jpeg,image/png,image/webp"),
   INTERNAL_UPLOAD_TOKEN_SECRET: z.string().min(1, "INTERNAL_UPLOAD_TOKEN_SECRET is required"),
+  INTERNAL_MAINTENANCE_TOKEN: z.string().optional().default(""),
   QWEN_API_URL: z.string().optional().default(""),
   QWEN_API_KEY: z.string().optional().default(""),
   QWEN_MODEL: z.string().min(1).default("qwen-image-layered"),
@@ -64,6 +66,19 @@ export function envIsConfigured(): boolean {
 }
 
 export function getAuthConfigEnv() {
+  if (!process.env.NEXTAUTH_SECRET) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("NEXTAUTH_SECRET must be configured in production.")
+    }
+  }
+
+  const hasGoogleClientId = Boolean(process.env.GOOGLE_CLIENT_ID)
+  const hasGoogleClientSecret = Boolean(process.env.GOOGLE_CLIENT_SECRET)
+
+  if (hasGoogleClientId !== hasGoogleClientSecret) {
+    throw new Error("GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must both be configured to enable Google auth.")
+  }
+
   return {
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || "development-nextauth-secret",
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",

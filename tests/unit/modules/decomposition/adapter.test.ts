@@ -12,7 +12,7 @@ describe("decompositionAdapter", () => {
     process.env.RATE_LIMIT_WINDOW_MS = "60000"
     process.env.RATE_LIMIT_MAX_REQUESTS = "60"
     process.env.LOG_LEVEL = "info"
-    process.env.NODE_ENV = "test"
+    Object.assign(process.env, { NODE_ENV: "test" })
     process.env.UPLOAD_MAX_FILES = "10"
     process.env.UPLOAD_MAX_FILE_SIZE_BYTES = "10485760"
     process.env.UPLOAD_ALLOWED_MIME_TYPES = "image/jpeg,image/png,image/webp"
@@ -37,5 +37,6 @@ describe("decompositionAdapter", () => {
     expect(result.providerJobId).toContain("mock-")
     expect(result.layers).toHaveLength(4)
     expect(result.layers[0]?.metadata.source).toBe("qwen")
+    expect(result.layers[0]?.artifact).toBeNull()
   })
 })

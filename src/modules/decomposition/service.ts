@@ -46,13 +46,17 @@ export const decompositionService = {
       projectId: scene.project.id,
       sceneId: scene.id,
       generationVersion: scene.generationVersion,
+      sourceAssetPath: scene.sourceImageUrl,
       expiresAt: scene.expiresAt,
       width: result.width,
       height: result.height,
+      compositeArtifact: result.compositeArtifact,
+      thumbnailArtifact: result.thumbnailArtifact,
       layers: result.layers.map((layer) => ({
         index: layer.index,
         width: layer.width,
         height: layer.height,
+        artifact: layer.artifact,
         metadata: {
           ...layer.metadata,
           modelVersion: result.modelVersion,
@@ -69,9 +73,11 @@ export const decompositionService = {
         assets: refreshedScene.assets.map((asset) => ({
           assetType: asset.assetType,
           layerOrder: asset.layerOrder,
+          metadataJson: asset.metadataJson,
         })),
         motionPreset: refreshedScene.motionPreset,
         motionIntensity: refreshedScene.motionIntensity,
+        framingData: refreshedScene.framingData,
       }, correlationId)
     }
 
